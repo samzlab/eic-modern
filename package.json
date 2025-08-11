@@ -11,6 +11,7 @@
         "build": "npm run build --workspaces --if-present",
         "build:core": "npm run build -w packages/core",
         "build:demo": "npm run build -w packages/demo",
+        "build:pages": "npm run build:core && npm run build:demo",
         "dev": "concurrently \"npm run dev -w packages/core\" \"npm run dev -w packages/demo\"",
         "dev:core": "npm run dev -w packages/core",
         "dev:demo": "npm run dev -w packages/demo",
