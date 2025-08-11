@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>EIC Modern - Demo</title>
+    </head>
+    <body class="min-h-screen bg-gradient-to-br from-primary-600 via-purple-600 to-pink-600">
+        <div class="container mx-auto px-4 py-8 max-w-6xl">
+            <!-- Header -->
+            <header class="text-center mb-12">
+                <h1 class="text-5xl md:text-6xl font-bold text-white mb-4 drop-shadow-lg">EIC Modern</h1>
+                <p class="text-xl text-white/90 max-w-2xl mx-auto">
+                    Energy Identification Code validation and generation library
+                </p>
+            </header>
+
+            <!-- Demo Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- EIC Generator Card -->
+                <div class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl p-6 border border-white/20">
+                    <div class="flex items-center gap-3 mb-6">
+                        <span class="text-3xl">🎲</span>
+                        <h3 class="text-2xl font-bold text-primary-700">Generate EIC</h3>
+                    </div>
+
+                    <div class="space-y-4">
+                        <!-- Quick Generate -->
+                        <div>
+                            <button
+                                onclick="generateRandomEIC()"
+                                class="w-full bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg"
+                            >
+                                🎯 Generate Random EIC
+                            </button>
+                        </div>
+
+                        <!-- Custom Generate -->
+                        <div class="border-t pt-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Custom Generation</label>
+                            <div class="grid grid-cols-2 gap-3 mb-3">
+                                <select
+                                    id="eic-type"
+                                    class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                                >
+                                    <option value="">Select Type</option>
+                                    <option value="x">PARTY</option>
+                                    <option value="y">AREA</option>
+                                    <option value="z">MEASUREMENT_POINT</option>
+                                    <option value="v">LOCATION</option>
+                                    <option value="w">RESOURCE</option>
+                                    <option value="t">TIE_LINE</option>
+                                    <option value="a">SUBSTATION</option>
+                                </select>
+                                <select
+                                    id="eic-issuer"
+                                    class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                                >
+                                    <option value="">Select Issuer</option>
+                                    <option value="10">ENTSO-E (EU)</option>
+                                    <option value="11">BDEW (DE)</option>
+                                    <option value="12">Swissgrid (CH)</option>
+                                    <option value="13">A&B (AT)</option>
+                                    <option value="16">REN (PT)</option>
+                                    <option value="17">RTE (FR)</option>
+                                    <option value="18">REE (ES)</option>
+                                    <option value="22">Elia (BE)</option>
+                                    <option value="26">Terna (IT)</option>
+                                    <option value="44">Fingrid (FI)</option>
+                                    <option value="45">Energinet (DK)</option>
+                                    <option value="48">NationalGrid (UK)</option>
+                                </select>
+                            </div>
+                            <button
+                                onclick="generateCustomEIC()"
+                                class="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-200 transform hover:scale-105 shadow-md"
+                            >
+                                Generate Custom EIC
+                            </button>
+                        </div>
+
+                        <!-- Generated Result -->
+                        <div id="generated-result" class="hidden bg-green-50 border border-green-200 rounded-lg p-4">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-green-600">✅</span>
+                                <span class="font-medium text-green-800">Generated EIC:</span>
+                            </div>
+                            <div
+                                class="bg-white rounded border p-3 font-mono text-lg font-bold text-center text-gray-800"
+                                id="generated-eic"
+                            ></div>
+                            <div class="mt-3 text-sm text-green-700">
+                                <div><strong>Type:</strong> <span id="generated-type"></span></div>
+                                <div><strong>Issuer:</strong> <span id="generated-issuer"></span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EIC Validator/Examiner Card -->
+                <div class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl p-6 border border-white/20">
+                    <div class="flex items-center gap-3 mb-6">
+                        <span class="text-3xl">🔍</span>
+                        <h3 class="text-2xl font-bold text-primary-700">Validate & Examine</h3>
+                    </div>
+
+                    <div class="space-y-4">
+                        <!-- Input -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Enter EIC Code:</label>
+                            <input
+                                type="text"
+                                id="eic-input"
+                                placeholder="e.g., 10x1001a1001a50z"
+                                class="w-full border border-gray-300 rounded-lg px-4 py-3 font-mono text-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                                oninput="validateInputEIC()"
+                            />
+                        </div>
+
+                        <!-- Quick Test Buttons -->
+                        <div class="flex flex-wrap gap-2">
+                            <button
+                                onclick="testSampleEIC('10x1001a1001a507')"
+                                class="text-xs bg-gray-100 hover:bg-gray-200 px-3 py-1 rounded-full"
+                            >
+                                Valid Sample
+                            </button>
+                            <button
+                                onclick="testSampleEIC('10x1001a1001a50x')"
+                                class="text-xs bg-gray-100 hover:bg-gray-200 px-3 py-1 rounded-full"
+                            >
+                                Invalid Sample
+                            </button>
+                            <button
+                                onclick="testSampleEIC('invalid-eic')"
+                                class="text-xs bg-gray-100 hover:bg-gray-200 px-3 py-1 rounded-full"
+                            >
+                                Malformed
+                            </button>
+                            <button
+                                onclick="clearInput()"
+                                class="text-xs bg-red-100 hover:bg-red-200 text-red-700 px-3 py-1 rounded-full"
+                            >
+                                Clear
+                            </button>
+                        </div>
+
+                        <!-- Validation Result -->
+                        <div id="validation-result" class="hidden">
+                            <!-- Valid Result -->
+                            <div id="valid-result" class="hidden bg-green-50 border border-green-200 rounded-lg p-4">
+                                <div class="flex items-center gap-2 mb-3">
+                                    <span class="text-green-600 text-xl">✅</span>
+                                    <span class="font-bold text-green-800">Valid EIC</span>
+                                </div>
+                                <div class="space-y-2 text-sm text-green-700">
+                                    <div><strong>Type:</strong> <span id="valid-type"></span></div>
+                                    <div><strong>Issuer:</strong> <span id="valid-issuer"></span></div>
+                                    <div><strong>Check Character:</strong> <span id="valid-check"></span></div>
+                                </div>
+                            </div>
+
+                            <!-- Invalid Result -->
+                            <div id="invalid-result" class="hidden bg-red-50 border border-red-200 rounded-lg p-4">
+                                <div class="flex items-center gap-2 mb-3">
+                                    <span class="text-red-600 text-xl">❌</span>
+                                    <span class="font-bold text-red-800">Invalid EIC</span>
+                                </div>
+                                <div id="error-list" class="space-y-1 text-sm text-red-700"></div>
+                                <div id="warning-list" class="mt-2 space-y-1 text-sm text-amber-700"></div>
+                            </div>
+
+                            <!-- Format Check -->
+                            <div id="format-result" class="hidden bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <span class="text-yellow-600 text-xl">⚠️</span>
+                                    <span class="font-bold text-yellow-800">Format Issues</span>
+                                </div>
+                                <div class="text-sm text-yellow-700">This doesn't look like a valid EIC format.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <footer class="text-center text-white/80 space-y-2 mt-12">
+                <p class="text-lg">
+                    Built with ❤️ using
+                    <a
+                        href="https://vitejs.dev/"
+                        target="_blank"
+                        class="text-white hover:text-primary-200 underline transition-colors"
+                        >Vite</a
+                    >,
+                    <a
+                        href="https://www.typescriptlang.org/"
+                        target="_blank"
+                        class="text-white hover:text-primary-200 underline transition-colors"
+                        >TypeScript</a
+                    >
+                    and
+                    <a
+                        href="https://tailwindcss.com/"
+                        target="_blank"
+                        class="text-white hover:text-primary-200 underline transition-colors"
+                        >Tailwind CSS</a
+                    >
+                </p>
+                <p class="text-sm">EIC (Energy Identification Code) library for modern web applications</p>
+            </footer>
+        </div>
+
+        <script type="module" src="./main.ts"></script>
+    </body>
+</html>

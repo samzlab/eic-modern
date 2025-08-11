@@ -1,0 +1,34 @@
+{
+    "name": "eic-modern",
+    "version": "0.1.0",
+    "description": "A modern TypeScript library",
+    "type": "module",
+    "private": true,
+    "workspaces": [
+        "packages/*"
+    ],
+    "scripts": {
+        "build": "npm run build --workspaces --if-present",
+        "build:core": "npm run build -w packages/core",
+        "build:demo": "npm run build -w packages/demo",
+        "dev": "concurrently \"npm run dev -w packages/core\" \"npm run dev -w packages/demo\"",
+        "dev:core": "npm run dev -w packages/core",
+        "dev:demo": "npm run dev -w packages/demo",
+        "start": "npm run dev:demo",
+        "test": "npm run test --workspaces --if-present",
+        "lint": "npm run lint --workspaces --if-present",
+        "format": "prettier --write .",
+        "clean": "npm run clean --workspaces --if-present"
+    },
+    "devDependencies": {
+        "@typescript-eslint/eslint-plugin": "^6.0.0",
+        "@typescript-eslint/parser": "^6.0.0",
+        "concurrently": "^9.2.0",
+        "eslint": "^8.45.0",
+        "prettier": "^3.0.0",
+        "typescript": "^5.0.0"
+    },
+    "engines": {
+        "node": ">=18"
+    }
+}

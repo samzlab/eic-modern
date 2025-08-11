@@ -1,0 +1,39 @@
+{
+    "name": "eic-modern",
+    "version": "0.1.0",
+    "description": "A modern TypeScript library",
+    "type": "module",
+    "main": "./dist/index.js",
+    "module": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "import": "./dist/index.js",
+            "types": "./dist/index.d.ts"
+        }
+    },
+    "files": [
+        "dist"
+    ],
+    "scripts": {
+        "build": "vite build && tsc --emitDeclarationOnly --outDir dist",
+        "dev": "vite build --watch",
+        "clean": "rm -rf dist",
+        "prepublishOnly": "npm run build"
+    },
+    "devDependencies": {
+        "@types/node": "^24.2.1",
+        "vite": "^5.0.0"
+    },
+    "keywords": [
+        "typescript",
+        "library",
+        "modern"
+    ],
+    "author": "",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/yourusername/eic-modern.git"
+    }
+}

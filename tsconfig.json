@@ -1,0 +1,29 @@
+{
+    "compilerOptions": {
+        "target": "ES2020",
+        "useDefineForClassFields": true,
+        "lib": ["ES2020", "DOM", "DOM.Iterable"],
+        "module": "ESNext",
+        "skipLibCheck": true,
+        "moduleResolution": "bundler",
+        "allowImportingTsExtensions": true,
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "noEmit": true,
+        "jsx": "react-jsx",
+        "strict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noFallthroughCasesInSwitch": true,
+        "declaration": true,
+        "declarationMap": true,
+        "outDir": "dist",
+        "baseUrl": ".",
+        "paths": {
+            "eic-modern": ["./packages/core/src/index.ts"],
+            "eic-modern/*": ["./packages/core/src/*"]
+        }
+    },
+    "include": ["packages/*/src/**/*", "packages/*/types/**/*"],
+    "exclude": ["node_modules", "dist", "**/*.spec.ts", "**/*.test.ts"]
+}
