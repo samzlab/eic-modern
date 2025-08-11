@@ -1,7 +1,7 @@
 {
     "name": "eic-modern",
-    "version": "0.1.0",
-    "description": "A modern TypeScript library",
+    "version": "1.0.0",
+    "description": "A modern ES6 / TypeScript library to validate and generate EIC codes",
     "type": "module",
     "main": "./dist/index.js",
     "module": "./dist/index.js",
@@ -30,10 +30,10 @@
         "library",
         "modern"
     ],
-    "author": "",
+    "author": "Kövesdi György",
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "https://github.com/yourusername/eic-modern.git"
+        "url": "https://github.com/samzlab/eic-modern"
     }
 }
