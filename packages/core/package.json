@@ -34,6 +34,6 @@
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "https://github.com/samzlab/eic-modern"
+        "url": "git+https://github.com/samzlab/eic-modern.git"
     }
 }
