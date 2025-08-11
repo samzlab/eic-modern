@@ -1,6 +1,6 @@
 {
     "name": "eic-modern",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "description": "A modern ES6 / TypeScript library to validate and generate EIC codes",
     "type": "module",
     "main": "./dist/index.js",
@@ -13,12 +13,13 @@
         }
     },
     "files": [
-        "dist"
+        "dist",
+        "README.md"
     ],
     "scripts": {
-        "build": "vite build && tsc --emitDeclarationOnly --outDir dist",
+        "build": "vite build && tsc --emitDeclarationOnly --outDir dist && cp ../../README.md .",
         "dev": "vite build --watch",
-        "clean": "rm -rf dist",
+        "clean": "rm -rf dist && rm -f README.md",
         "prepublishOnly": "npm run build"
     },
     "devDependencies": {
