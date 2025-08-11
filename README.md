@@ -4,7 +4,7 @@ A modern ES6 / TypeScript library for [EIC code](https://en.wikipedia.org/wiki/E
 
 The core library is based on [this](https://github.com/E-Group-ICT/EICjs/blob/master/eic.js) repository (refactored to ES6, TS and updated the LIO list)
 
-Try out: [EIC code validator and generator demo page](http://localhost:5174)
+Try out: [EIC code validator and generator demo page](https://samzlab.github.io/eic-modern/)
 
 ## Installation
 
