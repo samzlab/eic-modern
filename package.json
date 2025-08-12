@@ -1,7 +1,7 @@
 {
-    "name": "eic-modern",
-    "version": "0.1.0",
-    "description": "A modern TypeScript library",
+    "name": "eic-modern-ws",
+    "version": "1.0.0",
+    "description": "Workspace for EIC Modern library and demo",
     "type": "module",
     "workspaces": [
         "packages/*"
