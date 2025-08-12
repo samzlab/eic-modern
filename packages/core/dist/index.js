@@ -228,5 +228,7 @@ export {
   I as getIssuer,
   g as getType,
   M as isValid,
-  S as mayBeEIC
+  s as issuers,
+  S as mayBeEIC,
+  i as types
 };

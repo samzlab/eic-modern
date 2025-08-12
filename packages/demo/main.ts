@@ -6,6 +6,8 @@ import {
     getIssuer,
     generateRandomEIC as libGenerateRandomEIC,
     generateEIC,
+    issuers,
+    types,
 } from 'eic-modern';
 
 // Make functions available globally for the demo
@@ -301,7 +303,46 @@ window.clearInput = function () {
     hideElement('validation-result');
 };
 
+// Populate select elements with data from the library
+function populateSelectElements() {
+    // Populate issuer select
+    const issuerSelect = document.getElementById('eic-issuer') as HTMLSelectElement;
+    if (issuerSelect) {
+        // Sort issuers by code for better organization
+        const sortedIssuerCodes = Object.keys(issuers).sort((a, b) => parseInt(a) - parseInt(b));
+        
+        sortedIssuerCodes.forEach(code => {
+            const issuer = issuers[code];
+            const option = document.createElement('option');
+            option.value = code;
+            option.textContent = `${issuer.name} (${issuer.country})`;
+            issuerSelect.appendChild(option);
+        });
+    }
+
+    // Populate type select (also make it dynamic for consistency)
+    const typeSelect = document.getElementById('eic-type') as HTMLSelectElement;
+    if (typeSelect) {
+        // Clear existing options except the first one
+        while (typeSelect.children.length > 1) {
+            typeSelect.removeChild(typeSelect.lastChild!);
+        }
+        
+        // Sort types by key for consistent ordering
+        const sortedTypeCodes = Object.keys(types).sort();
+        
+        sortedTypeCodes.forEach(code => {
+            const typeName = types[code];
+            const option = document.createElement('option');
+            option.value = code;
+            option.textContent = typeName;
+            typeSelect.appendChild(option);
+        });
+    }
+}
+
 // Initialize the demo when the page loads
 document.addEventListener('DOMContentLoaded', () => {
     console.log('EIC Modern Demo loaded!');
+    populateSelectElements();
 });

@@ -56,7 +56,7 @@ function weighting(x: number, index: number): number {
 }
 
 // https://www.entsoe.eu/fileadmin/user_upload/edi/library/downloads/EIC_Reference_Manual_Release_5.pdf pp14-16
-const types: Record<string, string> = {
+export const types: Record<string, string> = {
     x: 'PARTY',
     y: 'AREA',
     z: 'MEASUREMENT_POINT',
@@ -67,7 +67,7 @@ const types: Record<string, string> = {
 };
 
 // https://www.entsoe.eu/data/energy-identification-codes-eic/#eic-lio-websites
-const issuers: Record<string, { name: string; country: string }> = {
+export const issuers: Record<string, { name: string; country: string }> = {
     '10': { name: 'ENTSO-E', country: 'EU' },
     '11': { name: 'BDEW', country: 'DE' },
     '12': { name: 'Swissgrid', country: 'CH' },

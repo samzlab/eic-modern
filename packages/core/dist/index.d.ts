@@ -3,6 +3,11 @@
  *
  * Modified to export functions as ES6 module and added TypeScript types.
  */
+export declare const types: Record<string, string>;
+export declare const issuers: Record<string, {
+    name: string;
+    country: string;
+}>;
 /**
  *  Does given string look like an EIC code? This function returns true if given string may be an EIC coce:
  *  it has the correct length and format; however, this function does not examine the check character.
