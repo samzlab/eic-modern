@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [ main ]
 
+permissions:
+  contents: write
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -103,6 +106,8 @@ jobs:
 
     - name: Commit and push demo pages
       run: |
+        # Pull latest changes to avoid conflicts
+        git pull origin main
         git add docs/
         if ! git diff --staged --quiet; then
           git commit -m "Deploy demo pages [skip ci]"
