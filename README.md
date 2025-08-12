@@ -138,6 +138,68 @@ console.log(areaEIC); // e.g., '11y3f5h7j9k2l4m8'
 generateEICWithTypeAndIssuer('invalid', '10'); // throws Error: 'Invalid type: invalid'
 ```
 
+#### `generateEIC(type?: string | null, issuer?: string | null, identifier?: string | null): string`
+
+Generate an EIC code with optional parameters. This is the most flexible generation function, allowing you to specify any combination of type, issuer, and identifier, with automatic random generation for unspecified parameters.
+
+```typescript
+import { generateEIC } from 'eic-modern';
+
+// Completely random EIC (equivalent to generateRandomEIC)
+const randomEIC = generateEIC();
+console.log(randomEIC); // e.g., '45zabc------123a'
+
+// Specify only type, random issuer and identifier
+const partyEIC = generateEIC('x');
+console.log(partyEIC); // e.g., '22xtest123---456'
+
+// Specify type and issuer, random identifier
+const specificEIC = generateEIC('x', '10');
+console.log(specificEIC); // e.g., '10xrandom-----789'
+
+// Specify all parameters
+const customEIC = generateEIC('y', '11', 'myid');
+console.log(customEIC); // '11ymyid-------[checkchar]'
+
+// Use null for random values
+const mixedEIC = generateEIC('z', null, 'test');
+console.log(mixedEIC); // e.g., '45ztest-------[checkchar]'
+```
+
+**Key Features:**
+- **Flexible Parameters**: Any parameter can be null/undefined for random generation
+- **Identifier Padding**: Short identifiers are automatically padded with dashes to 12 characters
+- **Random Length Identifiers**: When no identifier is specified, generates 1-12 character identifiers with dash padding
+- **Validation**: Validates all provided parameters and throws descriptive errors
+
+**Parameter Details:**
+- `type`: Single character ('x', 'y', 'z', 'v', 'w', 't', 'a') or null for random
+- `issuer`: Two-digit issuer code ('10', '11', etc.) or null for random  
+- `identifier`: Up to 12 characters (0-9, a-z, -) or null for random length (1-12 chars)
+
+**Examples with Identifier Padding:**
+```typescript
+generateEIC('x', '10', 'a');          // '10xa-----------[checkchar]'
+generateEIC('x', '10', 'test');       // '10xtest--------[checkchar]'  
+generateEIC('x', '10', 'mycompany');  // '10xmycompany---[checkchar]'
+generateEIC('x', '10', 'abcdefghijk0'); // '10xabcdefghijk0[checkchar]' (no padding)
+```
+
+**Error Cases:**
+```typescript
+// Identifier too long
+generateEIC('x', '10', 'thisistoolong123'); // throws Error
+
+// Invalid characters
+generateEIC('x', '10', 'test$123'); // throws Error
+
+// Invalid type
+generateEIC('invalid', '10', 'test'); // throws Error
+
+// Invalid issuer  
+generateEIC('x', 'invalid', 'test'); // throws Error
+```
+
 ### Utility Functions
 
 #### `calcCheckChar(str: string): string`
@@ -154,6 +216,47 @@ console.log(checkChar); // 'z'
 const base = '10x1001a1001a50';
 const completeEIC = base + calcCheckChar(base);
 console.log(completeEIC); // '10x1001a1001a50z'
+```
+
+### Constants
+
+#### `types: Record<string, string>`
+
+Exported constant containing all valid EIC type codes and their descriptions.
+
+```typescript
+import { types } from 'eic-modern';
+
+console.log(types);
+// {
+//   'x': 'PARTY',
+//   'y': 'AREA', 
+//   'z': 'MEASUREMENT_POINT',
+//   'v': 'LOCATION',
+//   'w': 'RESOURCE',
+//   't': 'TIE_LINE',
+//   'a': 'SUBSTATION'
+// }
+
+// Check if a type code is valid
+const isValidType = 'x' in types; // true
+```
+
+#### `issuers: Record<string, { name: string; country: string }>`
+
+Exported constant containing all valid EIC issuer codes and their information.
+
+```typescript
+import { issuers } from 'eic-modern';
+
+console.log(issuers['10']); // { name: 'ENTSO-E', country: 'EU' }
+console.log(issuers['11']); // { name: 'BDEW', country: 'DE' }
+
+// Get all available issuer codes
+const issuerCodes = Object.keys(issuers); // ['10', '11', '12', ...]
+
+// Check if an issuer code is valid
+const isValidIssuer = '10' in issuers; // true
 ```
 
 ## Type Definitions
