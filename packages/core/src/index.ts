@@ -319,3 +319,78 @@ export function generateEICWithTypeAndIssuer(type: string, issuer: string): stri
     const checkChar = calcCheckChar(code);
     return code + checkChar;
 }
+
+/**
+ * Generate an EIC code with optional parameters.
+ *
+ * The generated code will be valid, but it may not correspond to any real-world entity.
+ * If any parameter is not provided (null/undefined), a random value will be used.
+ *
+ * @param type - Optional type character. If null/undefined, a random type will be used.
+ * @param issuer - Optional issuer code (2 digits). If null/undefined, a random issuer will be used.
+ * @param identifier - Optional identifier (up to 12 characters). If null/undefined, a random-length identifier (1-12 chars) will be generated. If shorter than 12 characters, it will be padded with dashes.
+ * @returns A valid 16-character EIC code.
+ */
+export function generateEIC(
+    type?: string | null,
+    issuer?: string | null,
+    identifier?: string | null
+): string {
+    // Select type (random if not provided or null)
+    let selectedType: string;
+    if (type != null) {
+        if (!(type in types)) {
+            throw new Error(`Invalid type: ${type}. Valid types are: ${Object.keys(types).join(', ')}`);
+        }
+        selectedType = type;
+    } else {
+        const typesArray = Object.keys(types);
+        selectedType = typesArray[Math.floor(Math.random() * typesArray.length)];
+    }
+
+    // Select issuer (random if not provided or null)
+    let selectedIssuer: string;
+    if (issuer != null) {
+        if (!(issuer in issuers)) {
+            throw new Error(`Invalid issuer: ${issuer}. Valid issuers are: ${Object.keys(issuers).join(', ')}`);
+        }
+        selectedIssuer = issuer;
+    } else {
+        const issuersArray = Object.keys(issuers);
+        selectedIssuer = issuersArray[Math.floor(Math.random() * issuersArray.length)];
+    }
+
+    // Generate or use provided identifier
+    let selectedIdentifier: string;
+    if (identifier != null) {
+        // Validate the provided identifier
+        if (identifier.length > 12) {
+            throw new Error(`Identifier must be 12 characters or less, got ${identifier.length}`);
+        }
+        const identifierStr = identifier.toLowerCase();
+        for (let i = 0; i < identifierStr.length; i++) {
+            if (!(identifierStr[i] in charValues)) {
+                throw new Error(`Invalid character '${identifierStr[i]}' at position ${i} in identifier. Valid characters are: ${Object.keys(charValues).join(', ')}`);
+            }
+        }
+        // Pad with dashes to make it 12 characters
+        selectedIdentifier = identifierStr.padEnd(12, '-');
+    } else {
+        // Generate random length identifier (1-12 characters) and pad with dashes
+        const randomLength = Math.floor(Math.random() * 12) + 1; // Random length between 1 and 12
+        let randomIdentifier = '';
+        for (let i = 0; i < randomLength; i++) {
+            const charIndex = Math.floor(Math.random() * 37);
+            randomIdentifier += valueChars[charIndex];
+        }
+        // Pad with dashes to make it 12 characters
+        selectedIdentifier = randomIdentifier.padEnd(12, '-');
+    }
+
+    // Construct the 15-character base code
+    const baseCode = selectedIssuer + selectedType + selectedIdentifier;
+    
+    // Calculate and append the check character
+    const checkChar = calcCheckChar(baseCode);
+    return baseCode + checkChar;
+}

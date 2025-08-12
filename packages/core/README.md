@@ -1,5 +1,11 @@
 # eic-modern
 
+[![CI](https://github.com/samzlab/eic-modern/actions/workflows/ci.yml/badge.svg)](https://github.com/samzlab/eic-modern/actions/workflows/ci.yml)
+[![Coverage](https://samzlab.github.io/eic-modern/assets/coverage.svg)](https://samzlab.github.io/eic-modern/assets/coverage.svg)
+[![npm version](https://badge.fury.io/js/eic-modern.svg)](https://badge.fury.io/js/eic-modern)
+[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 A modern ES6 / TypeScript library for [EIC code](https://en.wikipedia.org/wiki/Energy_Identification_Code) validation and generation.
 
 The core library is based on [this](https://github.com/E-Group-ICT/EICjs/blob/master/eic.js) repository (refactored to ES6, TS and updated the LIO list)
@@ -196,6 +202,12 @@ npm run dev
 # Build all packages
 npm run build
 
+# Run tests
+npm test
+
+# Run tests with coverage
+npm run test:coverage
+
 # Run linting
 npm run lint
 
@@ -203,10 +215,24 @@ npm run lint
 npm run format
 ```
 
+### CI/CD
+
+This project uses GitHub Actions for continuous integration:
+
+- **Tests**: Runs on Node.js 18.x, 20.x, and 22.x
+- **Coverage**: Automatically uploaded to Coveralls (free for open source)
+- **Build**: Validates that all packages build successfully
+- **Demo**: Builds and uploads demo pages as artifacts
+
+The CI pipeline runs on every push to `main` and `develop` branches, as well as on pull requests.
+
 ### Project Structure
 
 ```
 eic-modern/
+├── .github/
+│   └── workflows/
+│       └── ci.yml     # GitHub Actions CI workflow
 ├── packages/
 │   ├── core/          # Main library package
 │   └── demo/          # Demo application

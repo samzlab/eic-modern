@@ -36,14 +36,14 @@ const y = {
   y: 34,
   z: 35,
   "-": 36
-}, i = Object.fromEntries(Object.entries(y).map(([n, e]) => [e, n]));
-function A(n) {
+}, l = Object.fromEntries(Object.entries(y).map(([n, e]) => [e, n]));
+function f(n) {
   return y[n];
 }
-function h(n, e) {
+function C(n, e) {
   return (16 - e) * n;
 }
-const t = {
+const i = {
   x: "PARTY",
   y: "AREA",
   z: "MEASUREMENT_POINT",
@@ -51,7 +51,7 @@ const t = {
   w: "RESOURCE",
   t: "TIE_LINE",
   a: "SUBSTATION"
-}, c = {
+}, s = {
   10: { name: "ENTSO-E", country: "EU" },
   11: { name: "BDEW", country: "DE" },
   12: { name: "Swissgrid", country: "CH" },
@@ -114,7 +114,7 @@ const t = {
   69: { name: "TSOC", country: "CY" },
   70: { name: "NOMAGAS JSC Skopje", country: "MK" }
 };
-function E(n) {
+function S(n) {
   if (n.length !== 15 && n.length !== 16)
     return !1;
   n = n.toLowerCase();
@@ -123,21 +123,21 @@ function E(n) {
       return !1;
   return !0;
 }
-function m(n) {
-  const r = n.substring(0, 15).toLowerCase().split("").map(A).map(h).reduce((o, a) => o + a, 0);
-  return i[36 - (r - 1) % 37];
+function E(n) {
+  const r = n.substring(0, 15).toLowerCase().split("").map(f).map(C).reduce((o, t) => o + t, 0);
+  return l[36 - (r - 1) % 37];
 }
-function l(n) {
-  if (!E(n))
+function g(n) {
+  if (!S(n))
     throw new Error("Malformed EIC code");
-  return t[n[2]];
+  return i[n[2]];
+}
+function I(n) {
+  if (!S(n))
+    throw new Error("Malformed EIC code");
+  return s[n.substring(0, 2)];
 }
 function T(n) {
-  if (!E(n))
-    throw new Error("Malformed EIC code");
-  return c[n.substring(0, 2)];
-}
-function C(n) {
   const e = {
     isValid: !0,
     errors: [],
@@ -146,46 +146,87 @@ function C(n) {
     type: void 0
   };
   n.length < 16 && e.errors.push({ errorMessage: "TOO_SHORT" }), n.length > 16 && e.errors.push({ errorMessage: "TOO_LONG" }), n = n.toLowerCase();
-  for (let o = 0, a = n.length; o < a; ++o)
+  for (let o = 0, t = n.length; o < t; ++o)
     n.charCodeAt(o) >= 97 && n.charCodeAt(o) <= 122 || n.charCodeAt(o) >= 48 && n.charCodeAt(o) <= 57 || n[o] === "-" || e.errors.push({ errorMessage: "INVALID_CHARACTER", errorParams: [o, n[o]] });
   if (e.errors.length)
     return e.isValid = !1, e;
-  const r = m(n);
-  return n[15] !== r && e.errors.push({ errorMessage: "CHECKCHAR_MISMATCH", errorParams: [r, n[15]] }), n[15] === r && r === "-" && e.errors.push({ errorMessage: "CHECKCHAR_HYPHEN" }), n[2] in t || e.warnings.push({ errorMessage: "UNKNOWN_TYPE", errorParams: [n[2]] }), n.substring(0, 2) in c || e.warnings.push({ errorMessage: "UNKNOWN_ISSUER", errorParams: [n.substring(0, 2)] }), e.issuer = T(n), e.type = l(n), e.isValid = e.errors.length === 0, e;
+  const r = E(n);
+  return n[15] !== r && e.errors.push({ errorMessage: "CHECKCHAR_MISMATCH", errorParams: [r, n[15]] }), n[15] === r && r === "-" && e.errors.push({ errorMessage: "CHECKCHAR_HYPHEN" }), n[2] in i || e.warnings.push({ errorMessage: "UNKNOWN_TYPE", errorParams: [n[2]] }), n.substring(0, 2) in s || e.warnings.push({ errorMessage: "UNKNOWN_ISSUER", errorParams: [n.substring(0, 2)] }), e.issuer = I(n), e.type = g(n), e.isValid = e.errors.length === 0, e;
 }
-function d(n) {
-  return C(n).isValid;
+function M(n) {
+  return T(n).isValid;
 }
-function f() {
-  const n = Object.keys(t), e = Object.keys(c), r = n[Math.floor(Math.random() * n.length)];
-  let a = e[Math.floor(Math.random() * e.length)] + r;
-  for (let s = 0; s < 12; s++) {
-    const S = Math.floor(Math.random() * 37);
-    a += i[S];
+function O() {
+  const n = Object.keys(i), e = Object.keys(s), r = n[Math.floor(Math.random() * n.length)];
+  let t = e[Math.floor(Math.random() * e.length)] + r;
+  for (let m = 0; m < 12; m++) {
+    const h = Math.floor(Math.random() * 37);
+    t += l[h];
   }
-  const u = m(a);
-  return a + u;
+  const u = E(t);
+  return t + u;
 }
-function g(n, e) {
-  if (!(n in t))
+function R(n, e) {
+  if (!(n in i))
     throw new Error(`Invalid type: ${n}`);
-  if (!(e in c))
+  if (!(e in s))
     throw new Error(`Invalid issuer: ${e}`);
   let r = e + n;
-  for (let a = 0; a < 12; a++) {
+  for (let t = 0; t < 12; t++) {
     const u = Math.floor(Math.random() * 37);
-    r += i[u];
+    r += l[u];
   }
-  const o = m(r);
+  const o = E(r);
   return r + o;
 }
+function N(n, e, r) {
+  let o;
+  if (n != null) {
+    if (!(n in i))
+      throw new Error(`Invalid type: ${n}. Valid types are: ${Object.keys(i).join(", ")}`);
+    o = n;
+  } else {
+    const a = Object.keys(i);
+    o = a[Math.floor(Math.random() * a.length)];
+  }
+  let t;
+  if (e != null) {
+    if (!(e in s))
+      throw new Error(`Invalid issuer: ${e}. Valid issuers are: ${Object.keys(s).join(", ")}`);
+    t = e;
+  } else {
+    const a = Object.keys(s);
+    t = a[Math.floor(Math.random() * a.length)];
+  }
+  let u;
+  if (r != null) {
+    if (r.length > 12)
+      throw new Error(`Identifier must be 12 characters or less, got ${r.length}`);
+    const a = r.toLowerCase();
+    for (let c = 0; c < a.length; c++)
+      if (!(a[c] in y))
+        throw new Error(`Invalid character '${a[c]}' at position ${c} in identifier. Valid characters are: ${Object.keys(y).join(", ")}`);
+    u = a.padEnd(12, "-");
+  } else {
+    const a = Math.floor(Math.random() * 12) + 1;
+    let c = "";
+    for (let d = 0; d < a; d++) {
+      const A = Math.floor(Math.random() * 37);
+      c += l[A];
+    }
+    u = c.padEnd(12, "-");
+  }
+  const m = t + o + u, h = E(m);
+  return m + h;
+}
 export {
-  m as calcCheckChar,
-  C as examine,
-  g as generateEICWithTypeAndIssuer,
-  f as generateRandomEIC,
-  T as getIssuer,
-  l as getType,
-  d as isValid,
-  E as mayBeEIC
+  E as calcCheckChar,
+  T as examine,
+  N as generateEIC,
+  R as generateEICWithTypeAndIssuer,
+  O as generateRandomEIC,
+  I as getIssuer,
+  g as getType,
+  M as isValid,
+  S as mayBeEIC
 };

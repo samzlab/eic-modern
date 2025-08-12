@@ -72,5 +72,17 @@ export declare function generateRandomEIC(): string;
  * The type and issuer must be valid according to the EIC specification.
  */
 export declare function generateEICWithTypeAndIssuer(type: string, issuer: string): string;
+/**
+ * Generate an EIC code with optional parameters.
+ *
+ * The generated code will be valid, but it may not correspond to any real-world entity.
+ * If any parameter is not provided (null/undefined), a random value will be used.
+ *
+ * @param type - Optional type character. If null/undefined, a random type will be used.
+ * @param issuer - Optional issuer code (2 digits). If null/undefined, a random issuer will be used.
+ * @param identifier - Optional identifier (up to 12 characters). If null/undefined, a random-length identifier (1-12 chars) will be generated. If shorter than 12 characters, it will be padded with dashes.
+ * @returns A valid 16-character EIC code.
+ */
+export declare function generateEIC(type?: string | null, issuer?: string | null, identifier?: string | null): string;
 export {};
 //# sourceMappingURL=index.d.ts.map

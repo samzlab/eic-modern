@@ -58,7 +58,7 @@
                                     id="eic-type"
                                     class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                                 >
-                                    <option value="">Select Type</option>
+                                    <option value="">Random Type</option>
                                     <option value="x">PARTY</option>
                                     <option value="y">AREA</option>
                                     <option value="z">MEASUREMENT_POINT</option>
@@ -71,7 +71,7 @@
                                     id="eic-issuer"
                                     class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                                 >
-                                    <option value="">Select Issuer</option>
+                                    <option value="">Random Issuer</option>
                                     <option value="10">ENTSO-E (EU)</option>
                                     <option value="11">BDEW (DE)</option>
                                     <option value="12">Swissgrid (CH)</option>
@@ -85,6 +85,20 @@
                                     <option value="45">Energinet (DK)</option>
                                     <option value="48">NationalGrid (UK)</option>
                                 </select>
+                            </div>
+                            <div class="mb-3">
+                                <input
+                                    type="text"
+                                    id="eic-identifier"
+                                    placeholder="Custom identifier (optional)"
+                                    maxlength="12"
+                                    class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm font-mono focus:ring-2 focus:ring-primary-500 focus:border-primary-500 invalid:border-red-500 invalid:ring-red-500"
+                                    oninput="validateIdentifierInput()"
+                                />
+                                <div class="text-xs text-gray-500 mt-1">
+                                    Leave empty for random identifier. Valid chars: 0-9, a-z, -. Will be padded with dashes if shorter than 12 chars.
+                                </div>
+                                <div id="identifier-error" class="hidden text-xs text-red-600 mt-1"></div>
                             </div>
                             <button
                                 onclick="generateCustomEIC()"

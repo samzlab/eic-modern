@@ -5,7 +5,7 @@ import {
     getType,
     getIssuer,
     generateRandomEIC as libGenerateRandomEIC,
-    generateEICWithTypeAndIssuer,
+    generateEIC,
 } from 'eic-modern';
 
 // Make functions available globally for the demo
@@ -14,6 +14,7 @@ declare global {
         generateRandomEIC: () => void;
         generateCustomEIC: () => void;
         validateInputEIC: () => void;
+        validateIdentifierInput: () => void;
         testSampleEIC: (eic: string) => void;
         clearInput: () => void;
     }
@@ -48,6 +49,35 @@ function setElementHTML(id: string, html: string) {
     }
 }
 
+// Validation functions
+function showError(elementId: string, message: string) {
+    const errorElement = document.getElementById(elementId);
+    if (errorElement) {
+        errorElement.textContent = message;
+        errorElement.classList.remove('hidden');
+    }
+}
+
+function hideError(elementId: string) {
+    const errorElement = document.getElementById(elementId);
+    if (errorElement) {
+        errorElement.classList.add('hidden');
+    }
+}
+
+function setInputValidity(inputId: string, isValid: boolean, message: string = '') {
+    const input = document.getElementById(inputId) as HTMLInputElement;
+    if (input) {
+        if (isValid) {
+            input.setCustomValidity('');
+            input.classList.remove('invalid:border-red-500', 'invalid:ring-red-500');
+        } else {
+            input.setCustomValidity(message);
+            input.classList.add('invalid:border-red-500', 'invalid:ring-red-500');
+        }
+    }
+}
+
 // Generate random EIC
 window.generateRandomEIC = function () {
     try {
@@ -68,21 +98,74 @@ window.generateRandomEIC = function () {
     }
 };
 
+// Validate identifier input as user types
+window.validateIdentifierInput = function () {
+    const identifierInput = document.getElementById('eic-identifier') as HTMLInputElement;
+    const identifier = identifierInput.value.trim();
+    
+    hideError('identifier-error');
+    setInputValidity('eic-identifier', true);
+    
+    if (!identifier) {
+        // Empty is valid (optional field)
+        return;
+    }
+    
+    // Check maximum length
+    if (identifier.length > 12) {
+        const message = `Identifier must be 12 characters or less (currently ${identifier.length})`;
+        showError('identifier-error', message);
+        setInputValidity('eic-identifier', false, message);
+        return;
+    }
+    
+    // Check valid characters
+    const validChars = /^[0-9a-z-]+$/i;
+    if (!validChars.test(identifier)) {
+        const message = 'Identifier can only contain 0-9, a-z, and hyphen (-)';
+        showError('identifier-error', message);
+        setInputValidity('eic-identifier', false, message);
+        return;
+    }
+};
+
 // Generate custom EIC
 window.generateCustomEIC = function () {
     const typeSelect = document.getElementById('eic-type') as HTMLSelectElement;
     const issuerSelect = document.getElementById('eic-issuer') as HTMLSelectElement;
+    const identifierInput = document.getElementById('eic-identifier') as HTMLInputElement;
 
-    const type = typeSelect.value;
-    const issuer = issuerSelect.value;
+    const type = typeSelect.value || null;
+    const issuer = issuerSelect.value || null;
+    const identifier = identifierInput.value.trim() || null;
 
-    if (!type || !issuer) {
-        alert('Please select both type and issuer');
-        return;
-    }
+    // Clear any previous error state
+    hideError('identifier-error');
+    setInputValidity('eic-identifier', true);
 
     try {
-        const eic = generateEICWithTypeAndIssuer(type, issuer);
+        // Validate custom identifier if provided
+        if (identifier) {
+            if (identifier.length > 12) {
+                const message = `Identifier must be 12 characters or less (currently ${identifier.length})`;
+                showError('identifier-error', message);
+                setInputValidity('eic-identifier', false, message);
+                identifierInput.focus();
+                return;
+            }
+
+            // Validate characters in custom identifier
+            const validChars = /^[0-9a-z-]+$/i;
+            if (!validChars.test(identifier)) {
+                const message = 'Identifier can only contain 0-9, a-z, and hyphen (-)';
+                showError('identifier-error', message);
+                setInputValidity('eic-identifier', false, message);
+                identifierInput.focus();
+                return;
+            }
+        }
+
+        const eic = generateEIC(type, issuer, identifier);
         const typeInfo = getType(eic);
         const issuerInfo = getIssuer(eic);
 
@@ -95,7 +178,20 @@ window.generateCustomEIC = function () {
         // Scroll to result
         document.getElementById('generated-result')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     } catch (error) {
-        alert(`Error generating EIC: ${error}`);
+        // Show error in console for debugging, but don't alert the user
+        console.error('Error generating EIC:', error);
+        
+        // If it's a validation error, show it near the relevant field
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+        if (errorMessage.includes('type') || errorMessage.includes('issuer')) {
+            // These would be programming errors, not user input errors
+            console.error('EIC generation error:', errorMessage);
+        } else {
+            // Assume it's an identifier-related error
+            showError('identifier-error', errorMessage);
+            setInputValidity('eic-identifier', false, errorMessage);
+            identifierInput.focus();
+        }
     }
 };
 
