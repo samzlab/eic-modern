@@ -3,6 +3,12 @@ name: Coverage Badge
 on:
   push:
     branches: [ main ]
+    paths:
+      - 'packages/core/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'tsconfig.json'
+      - '.github/workflows/coverage-badge.yml'
 
 permissions:
   contents: write
