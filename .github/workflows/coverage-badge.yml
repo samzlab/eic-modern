@@ -32,11 +32,19 @@ jobs:
         echo "Coverage: $COVERAGE"
 
     - name: Create coverage badge
-      uses: schneegans/dynamic-badges-action@v1.7.0
+      uses: jaywcjlove/coverage-badges-cli@main
       with:
-        auth: ${{ secrets.GITHUB_TOKEN }}
-        gistID: ${{ secrets.GIST_ID }}
-        filename: coverage-badge.json
-        label: coverage
-        message: ${{ steps.coverage.outputs.percentage }}
-        color: ${{ steps.coverage.outputs.percentage >= '90' && 'brightgreen' || steps.coverage.outputs.percentage >= '80' && 'yellow' || 'red' }}
+        source: packages/core/coverage/lcov.info
+        output: docs/assets/coverage.svg
+
+    - name: Commit coverage badge
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add docs/assets/coverage.svg
+        if ! git diff --staged --quiet; then
+          git commit -m "Update coverage badge [skip ci]"
+          git push
+        else
+          echo "No changes to coverage badge"
+        fi
