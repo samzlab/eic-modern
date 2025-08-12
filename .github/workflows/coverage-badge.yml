@@ -32,10 +32,33 @@ jobs:
         echo "Coverage: $COVERAGE"
 
     - name: Create coverage badge
-      uses: jaywcjlove/coverage-badges-cli@main
-      with:
-        source: packages/core/coverage/lcov.info
-        output: docs/assets/coverage.svg
+      run: |
+        # Extract coverage percentage from lcov.info
+        COVERAGE=$(grep -o "LF:[0-9]*" packages/core/coverage/lcov.info | awk -F: '{sum += $2} END {print sum}')
+        COVERED=$(grep -o "LH:[0-9]*" packages/core/coverage/lcov.info | awk -F: '{sum += $2} END {print sum}')
+        
+        if [ "$COVERAGE" -gt 0 ]; then
+          PERCENTAGE=$(awk "BEGIN {printf \"%.1f\", ($COVERED/$COVERAGE)*100}")
+        else
+          PERCENTAGE="0.0"
+        fi
+        
+        echo "Coverage: $PERCENTAGE%"
+        
+        # Determine color based on percentage
+        if (( $(echo "$PERCENTAGE >= 90" | bc -l) )); then
+          COLOR="brightgreen"
+        elif (( $(echo "$PERCENTAGE >= 80" | bc -l) )); then
+          COLOR="yellow"
+        else
+          COLOR="red"
+        fi
+        
+        # Create directory if it doesn't exist
+        mkdir -p docs/assets
+        
+        # Generate badge using shields.io
+        curl -s "https://img.shields.io/badge/coverage-${PERCENTAGE}%25-${COLOR}" > docs/assets/coverage.svg
 
     - name: Commit coverage badge
       run: |
