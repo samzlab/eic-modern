@@ -60,16 +60,16 @@ jobs:
         fi
         
         # Create directory if it doesn't exist
-        mkdir -p docs/assets
+        mkdir -p .github/assets
         
         # Generate badge using shields.io
-        curl -s "https://img.shields.io/badge/coverage-${PERCENTAGE}%25-${COLOR}" > docs/assets/coverage.svg
+        curl -s "https://img.shields.io/badge/coverage-${PERCENTAGE}%25-${COLOR}" > .github/assets/coverage.svg
 
     - name: Commit coverage badge
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git add docs/assets/coverage.svg
+        git add .github/assets/coverage.svg
         if ! git diff --staged --quiet; then
           git commit -m "Update coverage badge [skip ci]"
           git push

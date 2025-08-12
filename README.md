@@ -1,7 +1,7 @@
 # eic-modern
 
 [![CI](https://github.com/samzlab/eic-modern/actions/workflows/ci.yml/badge.svg)](https://github.com/samzlab/eic-modern/actions/workflows/ci.yml)
-[![Coverage](https://samzlab.github.io/eic-modern/assets/coverage.svg)](https://samzlab.github.io/eic-modern/assets/coverage.svg)
+[![Coverage](https://raw.githubusercontent.com/samzlab/eic-modern/main/.github/assets/coverage.svg)](https://raw.githubusercontent.com/samzlab/eic-modern/main/.github/assets/coverage.svg)
 [![npm version](https://badge.fury.io/js/eic-modern.svg)](https://badge.fury.io/js/eic-modern)
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
