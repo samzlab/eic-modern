@@ -172,13 +172,11 @@ describe('EIC Library Tests', () => {
         });
 
         it('should detect hyphen as check character error', () => {
-            // Create a code that would have hyphen as check character
-            const codeWithHyphen = '10x0000000000--';
+            // Use a code that actually produces hyphen as check character
+            const codeWithHyphen = '10x000000000002-'; // This actually produces '-' as check char
             const result = examine(codeWithHyphen);
-            if (result.errors.some(e => e.errorMessage === 'CHECKCHAR_HYPHEN')) {
-                expect(result.isValid).toBe(false);
-                expect(result.errors).toContainEqual({ errorMessage: 'CHECKCHAR_HYPHEN' });
-            }
+            expect(result.isValid).toBe(false);
+            expect(result.errors).toContainEqual({ errorMessage: 'CHECKCHAR_HYPHEN' });
         });
 
         it('should warn about unknown type', () => {
